@@ -175,12 +175,11 @@ public class Datasource {
 //        FROM books
 //        LEFT JOIN authors
 //        ON authors.author_ID = books.book_author_ID
-//        WHERE authors.author_name = "Herbert Schildt"
+//        WHERE authors.author_name = "authorName"
         StringBuilder stringBuilder = new StringBuilder("SELECT "+COLUMN_BOOK_NAME+","+COLUMN_AUTHOR_NAME+
-                " FROM "+TABLE_BOOKS+
-                " LEFT JOIN "+TABLE_AUTHORS+
-                " ON "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_ID+"="+TABLE_BOOKS+"."+COLUMN_BOOK_AUTHOR_ID+
-                " WHERE "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_NAME+"=\""+authorName+"\"");
+                " FROM "+TABLE_AUTHORS+","+TABLE_BOOKS+
+                " WHERE "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_ID+"="+TABLE_BOOKS+"."+COLUMN_BOOK_AUTHOR_ID+
+                " AND "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_NAME+"='"+authorName+"'");
 
         System.out.println("SQL statement: "+stringBuilder.toString()+"\n");
 
@@ -190,9 +189,10 @@ public class Datasource {
 
             List<String> booksTitleByAuthor = new ArrayList<>();
             while(resultSet.next()){
-                booksTitleByAuthor.add("Book Name: "+resultSet.getString(1)+
-                        "\nAuthor: "+resultSet.getString(2)+"\n");
+                booksTitleByAuthor.add("Book Name: "+resultSet.getString("book_name")+
+                        "\nAuthor: "+resultSet.getString("author_name"));
             }
+            System.out.println("Size: "+booksTitleByAuthor.size());
             return booksTitleByAuthor;
         }catch (SQLException e){
             System.out.println("Query failed: "+e.getMessage());
