@@ -161,7 +161,6 @@ public class Datasource {
                         "\nLanguage: "+resultSet.getString(5)+
                         "\nPublisher: "+resultSet.getString(6)+
                         "\nPublication Date: "+resultSet.getString(7)+"\n");
-
             }
             return books;
         }catch (SQLException e){
@@ -169,6 +168,37 @@ public class Datasource {
             e.printStackTrace();
             return null;
         }
+    }// end: queryAllBooksInfo
 
-    }// end: queryBookInfo
+    public List<String> queryBooksTitleByAuthorName(String authorName){
+//        SELECT book_name, author_name
+//        FROM books
+//        LEFT JOIN authors
+//        ON authors.author_ID = books.book_author_ID
+//        WHERE authors.author_name = "Herbert Schildt"
+        StringBuilder stringBuilder = new StringBuilder("SELECT "+COLUMN_BOOK_NAME+","+COLUMN_AUTHOR_NAME+
+                " FROM "+TABLE_BOOKS+
+                " LEFT JOIN "+TABLE_AUTHORS+
+                " ON "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_ID+"="+TABLE_BOOKS+"."+COLUMN_BOOK_AUTHOR_ID+
+                " WHERE "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_NAME+"=\""+authorName+"\"");
+
+        System.out.println("SQL statement: "+stringBuilder.toString()+"\n");
+
+        // Use try-with-resource will automatic close both Statement and ResultSet
+        try(Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(stringBuilder.toString())){
+
+            List<String> booksTitleByAuthor = new ArrayList<>();
+            while(resultSet.next()){
+                booksTitleByAuthor.add("Book Name: "+resultSet.getString(1)+
+                        "\nAuthor: "+resultSet.getString(2)+"\n");
+            }
+            return booksTitleByAuthor;
+        }catch (SQLException e){
+            System.out.println("Query failed: "+e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }// End: queryBooksByAuthorName
+
 }

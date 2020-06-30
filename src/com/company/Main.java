@@ -3,8 +3,6 @@ package com.company;
 import com.company.model.Author;
 import com.company.model.Book;
 import com.company.model.Datasource;
-
-import java.sql.*;
 import java.util.List;
 
 public class Main {
@@ -28,7 +26,7 @@ public class Main {
         }
 
         // Get Book Title
-        System.out.println("===List Book Title in DataBase===");
+        System.out.println("===List Books Title in DataBase===");
         List<Book> books = datasource.queryBooksTitle(Datasource.ORDER_BY_NONE);
         if(books == null){
             System.out.println("No book in database");
@@ -38,8 +36,8 @@ public class Main {
             System.out.println("Book Title: "+book.getBook_name());
         }
 
-        // Get Book Title
-        System.out.println("===List Book Info in DataBase===");
+        // Get All Book Info
+        System.out.println("===List All Books Info in DataBase===");
         List<String> bookInfo = datasource.queryAllBooksInfo(Datasource.ORDER_BY_NONE);
         if(books == null){
             System.out.println("No book in database");
@@ -49,7 +47,16 @@ public class Main {
             System.out.println(book);
         }
 
-
+        // Get Books Title by Author
+        System.out.println("===List Books Title By Author===");
+        List<String> booksByAuthor = datasource.queryBooksTitleByAuthorName("Robert Lafore");
+        if(booksByAuthor == null){
+            System.out.println("No such data");
+            return;
+        }
+        for(String bookByAuthor: booksByAuthor){
+            System.out.println(bookByAuthor);
+        }
 
         datasource.close();
 
