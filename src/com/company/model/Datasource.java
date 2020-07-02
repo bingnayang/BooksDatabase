@@ -172,10 +172,9 @@ public class Datasource {
 
     public List<String> queryBooksTitleByAuthorName(String authorName){
 //        SELECT book_name, author_name
-//        FROM books
-//        LEFT JOIN authors
-//        ON authors.author_ID = books.book_author_ID
-//        WHERE authors.author_name = "authorName"
+//        FROM authors, books
+//        WHERE authors.author_ID=books.book_author_ID
+//        AND authors.author_name = 'authorName'
         StringBuilder stringBuilder = new StringBuilder("SELECT "+COLUMN_BOOK_NAME+","+COLUMN_AUTHOR_NAME+
                 " FROM "+TABLE_AUTHORS+","+TABLE_BOOKS+
                 " WHERE "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_ID+"="+TABLE_BOOKS+"."+COLUMN_BOOK_AUTHOR_ID+
@@ -189,8 +188,8 @@ public class Datasource {
 
             List<String> booksTitleByAuthor = new ArrayList<>();
             while(resultSet.next()){
-                booksTitleByAuthor.add("Book Name: "+resultSet.getString("book_name")+
-                        "\nAuthor: "+resultSet.getString("author_name"));
+                booksTitleByAuthor.add("Book Title: "+resultSet.getString("book_name")+
+                        "\nAuthor: "+resultSet.getString("author_name")+"\n");
             }
             System.out.println("Size: "+booksTitleByAuthor.size());
             return booksTitleByAuthor;
