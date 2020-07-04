@@ -200,4 +200,32 @@ public class Datasource {
         }
     }// End: queryBooksByAuthorName
 
+    public List<String> queryBookAuthorByISBN(String isbn){
+//        SELECT book_name, author_name
+//        FROM authors, books
+//        WHERE authors.author_ID=books.book_author_ID
+//        AND books.book_ISBN_13 = '978-0672324536'
+        StringBuilder stringBuilder = new StringBuilder("SELECT "+COLUMN_BOOK_NAME+","+COLUMN_AUTHOR_NAME+
+                " FROM "+TABLE_AUTHORS+","+TABLE_BOOKS+
+                " WHERE "+TABLE_AUTHORS+"."+COLUMN_AUTHOR_ID+"="+TABLE_BOOKS+"."+COLUMN_BOOK_AUTHOR_ID+
+                " AND "+TABLE_BOOKS+"."+COLUMN_BOOK_ISBN_13+"='"+isbn+"'");
+
+        System.out.println("SQL statement: "+stringBuilder.toString()+"\n");
+        // Use try-with-resource will automatic close both Statement and ResultSet
+        try(Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(stringBuilder.toString())){
+
+            List<String> booksTitleByAuthor = new ArrayList<>();
+            while(resultSet.next()){
+                booksTitleByAuthor.add("Book Title: "+resultSet.getString(1)+
+                        "\nAuthor: "+resultSet.getString(2)+"\n");
+            }
+            return booksTitleByAuthor;
+        }catch (SQLException e){
+            System.out.println("Query failed: "+e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

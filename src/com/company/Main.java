@@ -34,6 +34,9 @@ public class Main {
                     searchBooksByAuthor(datasource);
                     break;
                 case 5:
+                    searchBookByISBN_13(datasource);
+                    break;
+                case 6:
                     break;
                 default:
                     System.out.println("Not an option");
@@ -48,11 +51,11 @@ public class Main {
         System.out.println("1) List All Authors in Database");
         System.out.println("2) List All Books Title in DataBase");
         System.out.println("3) List All Books Info in DataBase");
-        System.out.println("4) List Books Title By Author");
-        System.out.println("5) Exit");
+        System.out.println("4) Search Books Title By Author");
+        System.out.println("5) Search Book and Author By ISBN_13");
+        System.out.println("6) Exit");
         System.out.print("Enter Your Option: ");
         System.out.println();
-
     }
 
     public static void displayAllAuthorsName(Datasource datasource) {
@@ -102,6 +105,16 @@ public class Main {
         String authorName = scanner.nextLine();
 
         List<String> booksByAuthor = datasource.queryBooksTitleByAuthorName(authorName);
+        if (booksByAuthor == null) {
+            System.out.println("No such data");
+            return;
+        }
+        for (String bookByAuthor : booksByAuthor) {
+            System.out.println(bookByAuthor);
+        }
+    }
+    public static void searchBookByISBN_13(Datasource datasource){
+        List<String> booksByAuthor = datasource.queryBookAuthorByISBN("978-1259589317");
         if (booksByAuthor == null) {
             System.out.println("No such data");
             return;
